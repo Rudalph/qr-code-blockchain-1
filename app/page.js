@@ -55,7 +55,7 @@ export default function Home() {
     console.log("Form Data:", data);
 
     try {
-      const response = await fetch('https://qr-generator-0tqz.onrender.com/qrcode', {
+      const response = await fetch('https://qr-code-blockchain-1d-backend.onrender.com/qrcode', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -3,31 +3,12 @@ import React, { useEffect, useState } from "react"
 import Web3 from "web3";
 import contractABI from "./abi.json";
 
-
-const web3 = new Web3(window.ethereum);
+// Remove the top-level Web3 initialization
 const contractAddress = "0xB8005CFb5e6Ff4A63a770699c5ED71C439066F61";
 
-
 export default function Home() {
-
   const [web3, setWeb3] = useState(null);
   const [contract, setContract] = useState(null);
-
-
-  useEffect(() => {
-
-    console.log("I am inside useEffect")
-    console.log(contractABI)
-
-    if (typeof window !== "undefined" && window.ethereum) {
-      const web3Instance = new Web3(window.ethereum);
-      setWeb3(web3Instance);
-
-      const contractInstance = new web3Instance.eth.Contract(contractABI, contractAddress);
-      setContract(contractInstance);
-    }
-  }, []);
-
   const [data, setData] = useState({
     product_name: '',
     batch_number: '',
@@ -37,12 +18,33 @@ export default function Home() {
     price: '',
     weight: '',
     man_name: ''
-  })
+  });
 
   const [qrCode, setQrCode] = useState(null);
-  const [url, setUrl] = useState(null)
-  const [hashValue, setHashValue] = useState(null)
+  const [url, setUrl] = useState(null);
+  const [hashValue, setHashValue] = useState(null);
   const [txHash, setTxHash] = useState(null);
+
+  useEffect(() => {
+    const initializeWeb3 = async () => {
+      if (typeof window !== "undefined" && window.ethereum) {
+        try {
+          const web3Instance = new Web3(window.ethereum);
+          setWeb3(web3Instance);
+
+          const contractInstance = new web3Instance.eth.Contract(
+            contractABI,
+            contractAddress
+          );
+          setContract(contractInstance);
+        } catch (error) {
+          console.error("Error initializing Web3:", error);
+        }
+      }
+    };
+
+    initializeWeb3();
+  }, []);
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -51,7 +53,6 @@ export default function Home() {
   const sendData = async (e) => {
     e.preventDefault();
     console.log("Form Data:", data);
-
 
     try {
       const response = await fetch('http://127.0.0.1:5000/qrcode', {
@@ -72,8 +73,11 @@ export default function Home() {
       setUrl(productUrl);
       setHashValue(productHash);
 
+      if (!window.ethereum) {
+        alert("MetaMask is not installed");
+        return;
+      }
 
-      if (!window.ethereum) return alert("MetaMask is not installed");
       try {
         await window.ethereum.request({ method: "eth_requestAccounts" });
         const accounts = await web3.eth.getAccounts();
@@ -97,15 +101,10 @@ export default function Home() {
       } catch (error) {
         console.error("Error sending transaction:", error);
       }
-
     } catch (error) {
       console.error('Error sending data:', error);
     }
-
-
-
-
-  }
+  };
 
   return (
     <>
@@ -114,7 +113,6 @@ export default function Home() {
         <div className="max-w-lg w-1/2 bg-white p-6 rounded-2xl shadow-lg border border-gray-200 h-full">
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">Product Details</h2>
           <form className="space-y-4">
-            {/** Input Fields */}
             <div className="grid grid-cols-2 gap-4">
               {[
                 { name: "product_name", label: "Product Name" },
@@ -139,18 +137,17 @@ export default function Home() {
               ))}
             </div>
 
-            {/** Submit Button */}
             <button
               type="submit"
               className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition"
-              onClick={(e) => { sendData(e) }}
+              onClick={sendData}
             >
               Submit
             </button>
           </form>
         </div>
 
-        {/** Placeholder Image & Static Fields */}
+        {/** QR Code Display */}
         <div className="max-w-4xl w-1/2 bg-white p-6 rounded-2xl shadow-lg border border-gray-200 h-full flex flex-col items-center">
           <div className="w-full h-80 rounded-lg flex items-center justify-center text-gray-500 text-lg">
             {qrCode ? (
@@ -160,7 +157,7 @@ export default function Home() {
             )}
           </div>
           <div className="mt-4 space-y-2 w-full">
-            <p className="text-gray-700 font-medium">URL: {url ? <span className="text-gray-500">{url}</span> : <span className="text-gray-500">URL will de displayed here</span>}</p>
+            <p className="text-gray-700 font-medium">URL: {url ? <span className="text-gray-500">{url}</span> : <span className="text-gray-500">URL will be displayed here</span>}</p>
             <p className="text-gray-700 font-medium">HASH: {hashValue ? <span className="text-gray-500">{hashValue}</span> : <span className="text-gray-500">Hash of data will be displayed here</span>}</p>
             <p className="text-gray-700 font-medium">Transaction Hash: {txHash ? <span className="text-gray-500">{txHash}</span> : <span className="text-gray-500">Transaction hash will be displayed here</span>}</p>
           </div>

@@ -70,7 +70,7 @@ export default function UploadQR() {
     formData.append("file", selectedFile);
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/upload_qr", {
+      const response = await fetch("https://qr-code-blockchain-1d-backend.onrender.com/upload_qr", {
         method: "POST",
         body: formData,
       });

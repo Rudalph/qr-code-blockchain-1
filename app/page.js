@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react"
 import Web3 from "web3";
 import contractABI from "./abi.json";
+import Link from "next/link";
+
 
 // Remove the top-level Web3 initialization
 const contractAddress = "0xB8005CFb5e6Ff4A63a770699c5ED71C439066F61";
@@ -108,7 +110,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex justify-center align-middle items-center gap-6 mt-20">
+      <div className="flex justify-center align-middle items-center gap-6 mt-10">
         {/** Product Form */}
         <div className="max-w-lg w-1/2 bg-white p-6 rounded-2xl shadow-lg border border-gray-200 h-full">
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">Product Details</h2>
@@ -167,6 +169,12 @@ export default function Home() {
       <div className="flex justify-center align-middle items-center w-96 mx-[550px] mt-12 border border-green-600 bg-green-100 rounded-lg h-16">
         {!web3 ? <p>Web3 not initialized. Please connect your wallet.</p> : <p>Connected to Smart Contract</p>}
       </div>
+
+      <Link href="/validation">
+      <div className="flex justify-center align-middle items-center w-96 mx-[550px] mt-5 border border-blue-600 bg-[#A0C3FF] rounded-lg h-16">
+          <p>Validate Product</p>
+      </div>
+      </Link>
     </>
   );
 }

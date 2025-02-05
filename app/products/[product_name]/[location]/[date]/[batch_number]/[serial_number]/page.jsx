@@ -47,7 +47,7 @@ export default function ProductPage({ params }) {
     return (
       <div className="flex justify-center items-center min-h-screen p-4">
         <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
-          <div className="text-red-500 text-center">
+          {/* <div className="text-red-500 text-center">
             {error}
             {!walletConnected && (
               <button 
@@ -57,7 +57,7 @@ export default function ProductPage({ params }) {
                 Connect Wallet
               </button>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     );

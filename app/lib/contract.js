@@ -167,12 +167,12 @@ export const connectWallet = async () => {
   }
 };
 
-export const getProductDetails = async (identifier, web3) => {
+export const getProductDetails = async (identifier) => {
   try {
-    // const web3 = await connectWallet();
+    const web3 = await connectWallet();
     const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
     
-    const product = await contract.methods.getProduct(identifier).call({ from: web3.eth.defaultAccount });
+    const product = await contract.methods.getProduct(identifier).call();
     
     return {
       productName: product[0],

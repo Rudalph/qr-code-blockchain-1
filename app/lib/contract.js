@@ -192,7 +192,7 @@ const CONTRACT_ABI = [
 //   }
 // };
 
-import Web3 from 'web3';
+
 
 // Initialize Web3 with your RPC URL
 const web3 = new Web3(process.env.NEXT_PUBLIC_RPC_URL);

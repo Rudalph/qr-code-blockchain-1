@@ -152,79 +152,27 @@ const CONTRACT_ABI = [
 	}
 ];
 
-// export const connectWallet = async () => {
-//   if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-//     try {
-//       // Request account access
-//       await window.ethereum.request({ method: 'eth_requestAccounts' });
-//       const web3 = new Web3(window.ethereum);
-//       return web3;
-//     } catch (error) {
-//       throw new Error('Failed to connect wallet: ' + error.message);
-//     }
-//   } else {
-//     throw new Error('Please install MetaMask!');
-//   }
-// };
-
-// export const getProductDetails = async (identifier, web3) => {
-//   try {
-//     // const web3 = await connectWallet();
-//     const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-    
-//     const product = await contract.methods.getProduct(identifier).call({ from: web3.eth.defaultAccount });
-    
-//     return {
-//       productName: product[0],
-//       batchNumber: product[1],
-//       location: product[2],
-//       date: product[3],
-//       serialNumber: product[4],
-//       price: product[5],
-//       weight: product[6],
-//       manufacturerName: product[7],
-//       url: product[8],
-//       hashValue: product[9]
-//     };
-//   } catch (error) {
-//     console.error('Error fetching product:', error);
-//     throw error;
-//   }
-// };
-
-
-
-// Initialize Web3 with your RPC URL
-const web3 = new Web3(process.env.NEXT_PUBLIC_RPC_URL);
-
-// Initialize the fixed wallet
-const initializeWallet = () => {
-  try {
-    const account = web3.eth.accounts.privateKeyToAccount(
-      process.env.NEXT_PUBLIC_WALLET_PRIVATE_KEY
-    );
-    web3.eth.accounts.wallet.add(account);
-    web3.eth.defaultAccount = account.address;
-    return web3;
-  } catch (error) {
-    console.error('Failed to initialize wallet:', error);
-    throw error;
+export const connectWallet = async () => {
+  if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
+    try {
+      // Request account access
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const web3 = new Web3(window.ethereum);
+      return web3;
+    } catch (error) {
+      throw new Error('Failed to connect wallet: ' + error.message);
+    }
+  } else {
+    throw new Error('Please install MetaMask!');
   }
 };
 
-export const getProductDetails = async (identifier) => {
+export const getProductDetails = async (identifier, web3) => {
   try {
-    // Initialize web3 with the fixed wallet
-    const web3Instance = initializeWallet();
+    // const web3 = await connectWallet();
+    const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
     
-    const contract = new web3Instance.eth.Contract(
-      CONTRACT_ABI, 
-      CONTRACT_ADDRESS
-    );
-    
-    const product = await contract.methods.getProduct(identifier).call({
-      from: web3Instance.eth.defaultAccount
-    });
+    const product = await contract.methods.getProduct(identifier).call({ from: web3.eth.defaultAccount });
     
     return {
       productName: product[0],
@@ -243,3 +191,4 @@ export const getProductDetails = async (identifier) => {
     throw error;
   }
 };
+

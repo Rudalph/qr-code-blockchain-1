@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { getProductDetails } from '@/app/lib/contract.js';
-import Web3 from 'web3';
+
 
 export default function ProductPage({ params }) {
   const [product, setProduct] = useState(null);
@@ -14,17 +14,10 @@ export default function ProductPage({ params }) {
     const fetchProduct = async () => {
       try {
 
-        const web3 = new Web3(process.env.NEXT_PUBLIC_RPC_URL);
-        const account = web3.eth.accounts.privateKeyToAccount(
-          process.env.NEXT_PUBLIC_WALLET_PRIVATE_KEY
-        );
-        web3.eth.accounts.wallet.add(account);
-        web3.eth.defaultAccount = account.address;
-
         const identifier = `${params.product_name}_${params.serial_number}`;
-        const productData = await getProductDetails(identifier, web3);
+        const productData = await getProductDetails(identifier);
         setProduct(productData);
-        // setWalletConnected(true);
+        setWalletConnected(true);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -47,7 +40,7 @@ export default function ProductPage({ params }) {
     return (
       <div className="flex justify-center items-center min-h-screen p-4">
         <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
-          {/* <div className="text-red-500 text-center">
+          <div className="text-red-500 text-center">
             {error}
             {!walletConnected && (
               <button 
@@ -57,7 +50,7 @@ export default function ProductPage({ params }) {
                 Connect Wallet
               </button>
             )}
-          </div> */}
+          </div>
         </div>
       </div>
     );

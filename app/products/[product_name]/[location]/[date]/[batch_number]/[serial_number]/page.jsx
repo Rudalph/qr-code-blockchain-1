@@ -252,7 +252,7 @@ export default function ProductPage({ params }) {
               <InfoItem label="Manufacturer" value={product.manufacturerName} />
               
               {/* Full Width Items */}
-              <div className="col-span-full">
+              {/* <div className="col-span-full">
                 <InfoItem 
                   label="URL" 
                   value={
@@ -266,9 +266,9 @@ export default function ProductPage({ params }) {
                     </a>
                   } 
                 />
-              </div>
+              </div> */}
               
-              <div className="col-span-full">
+              {/* <div className="col-span-full">
                 <InfoItem 
                   label="Hash Value" 
                   value={
@@ -277,7 +277,7 @@ export default function ProductPage({ params }) {
                     </span>
                   } 
                 />
-              </div>
+              </div> */}
             </div>
           </div>
 

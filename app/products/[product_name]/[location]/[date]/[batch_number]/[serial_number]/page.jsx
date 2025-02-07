@@ -154,6 +154,8 @@
 import { useEffect, useState } from 'react';
 import { getProductDetails } from '@/app/lib/contract.js';
 import Image from 'next/image';
+import { Analytics } from '@vercel/analytics/react';
+
 
 export default function ProductPage({ params }) {
   const [product, setProduct] = useState(null);
@@ -294,7 +296,9 @@ export default function ProductPage({ params }) {
           </div> */}
         </div>
       </div>
+      <Analytics />
     </div>
+    
   );
 }
 

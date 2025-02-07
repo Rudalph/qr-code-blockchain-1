@@ -153,6 +153,7 @@
 
 import { useEffect, useState } from 'react';
 import { getProductDetails } from '@/app/lib/contract.js';
+import Image from 'next/image';
 
 export default function ProductPage({ params }) {
   const [product, setProduct] = useState(null);
@@ -213,6 +214,7 @@ export default function ProductPage({ params }) {
           <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
             <h1 className="text-2xl font-bold text-white text-center">
               Product Details
+              <Image src="/msb.jpg" height={100} width={100}/>
             </h1>
           </div>
 

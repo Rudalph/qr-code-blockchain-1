@@ -211,11 +211,22 @@ export default function ProductPage({ params }) {
       <div className="max-w-3xl mx-auto">
         <div className="bg-white shadow-xl rounded-lg overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+          <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4 flex justify-evenly align-middle items-center">
             <h1 className="text-2xl font-bold text-white text-center">
               Product Details
               <Image src="/msb.jpg" height={100} width={100}/>
             </h1>
+          </div>
+
+          <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-500">
+                Blockchain Verified
+              </span>
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                ✓ Verified
+              </span>
+            </div>
           </div>
 
           {/* Content */}
@@ -262,7 +273,7 @@ export default function ProductPage({ params }) {
           </div>
 
           {/* Verification Status */}
-          <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
+          {/* <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-500">
                 Blockchain Verified
@@ -271,7 +282,7 @@ export default function ProductPage({ params }) {
                 ✓ Verified
               </span>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

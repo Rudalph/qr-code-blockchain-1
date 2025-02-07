@@ -219,7 +219,7 @@ export default function ProductPage({ params }) {
           </div> */}
 
 <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
-      <div className="flex items-center justify-center space-x-6">
+      <div className="flex flex-row items-center justify-center gap-6">
         <h1 className="text-2xl font-bold text-white">
           Product Details
         </h1>

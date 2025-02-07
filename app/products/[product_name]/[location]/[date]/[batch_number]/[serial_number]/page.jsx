@@ -211,12 +211,21 @@ export default function ProductPage({ params }) {
       <div className="max-w-3xl mx-auto">
         <div className="bg-white shadow-xl rounded-lg overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4 flex justify-evenly align-middle items-center">
+          {/* <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4 flex justify-evenly align-middle items-center">
             <h1 className="text-2xl font-bold text-white text-center">
               Product Details
               <Image src="/msb.jpg" height={100} width={100}/>
             </h1>
-          </div>
+          </div> */}
+
+<div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+      <div className="flex items-center justify-center space-x-6">
+        <h1 className="text-2xl font-bold text-white">
+          Product Details
+        </h1>
+        <Image src="/msb.jpg" height={100} width={100}/>
+      </div>
+    </div>
 
           <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
             <div className="flex items-center justify-between">

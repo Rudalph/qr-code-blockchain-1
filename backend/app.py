@@ -20,7 +20,7 @@ def generate_qrcode():
     weight = data['weight'].lower()
     man_name = data['man_name'].lower()
     
-    url = f"http://127.0.0.1:5000/products/{product_name}/{location}/{date}/{batch_number}/{serial_number}"
+    url = f"http://localhost:3000/products/{product_name}/{location}/{date}/{batch_number}/{serial_number}"
     
     hash_obj = hashlib.sha256()
     hash_obj.update(url.encode())

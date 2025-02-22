@@ -77,7 +77,7 @@ export default function ProductPage({ params }) {
           Product Details
         </h1>
         <Image src="/msb.jpg" height={100} width={100}/>
-        <Location_Fetching />
+        
       </div>
     </div>
 
@@ -149,6 +149,7 @@ export default function ProductPage({ params }) {
         </div>
       </div>
       <Analytics />
+      <Location_Fetching />
     </div>
     
   );

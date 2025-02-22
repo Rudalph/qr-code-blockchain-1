@@ -1,7 +1,7 @@
 "use client"
 import { useState } from 'react';
-import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { getApp, initializeApp } from 'firebase/app';
 
 
 
@@ -17,70 +17,51 @@ import { getFirestore, collection, addDoc } from 'firebase/firestore';
 
 
   
-  const app = initializeApp(firebaseConfig);
+  const app = getApp.length ? getApp() : initializeApp(firebaseConfig);
   const db = getFirestore(app);
   
 
   
 const Location_Fetching = () => {
-    const [status, setStatus] = useState('');
+  const [location, setLocation] = useState(null);
   const [error, setError] = useState(null);
 
-  const getLocationAndStore = async () => {
-    try {
-      setStatus('Fetching location...');
-      
-      const position = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
-      });
-
-      const { latitude, longitude } = position.coords;
-      
-      setStatus('Storing location...');
-      
-      // Store in Firebase
-      await addDoc(collection(db, 'userLocations'), {
-        latitude,
-        longitude,
-        timestamp: new Date().toISOString()
-      });
-
-      setStatus('Location stored successfully!');
-    } catch (err) {
-      if (err.code === 1) {
-        setError('Location permission denied');
-      } else {
-        setError('Error getting location: ' + err.message);
-      }
-    }
-  };
-
-  const handleLocationPrompt = () => {
-    if (!navigator.geolocation) {
+  const fetchLocation = () => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          setLocation({ latitude, longitude });
+          
+          try {
+            await addDoc(collection(db, 'locations'), {
+              latitude,
+              longitude,
+              timestamp: new Date(),
+            });
+            alert('Location saved successfully!');
+          } catch (err) {
+            setError('Failed to save location');
+          }
+        },
+        (err) => setError(err.message)
+      );
+    } else {
       setError('Geolocation is not supported by your browser');
-      return;
     }
-    getLocationAndStore();
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h2 className="text-xl font-bold mb-4">Share Your Location</h2>
-      
-      <button
-        onClick={handleLocationPrompt}
-        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-      >
-        Share Location
+    <div className="p-4 text-center">
+      <h2 className="text-xl font-bold">Share Your Location</h2>
+      <p>Would you like to share your location?</p>
+      <button onClick={fetchLocation} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
+        Yes, Share Location
       </button>
-
-      {status && (
-        <p className="mt-4 text-green-600">{status}</p>
+      {location && (
+        <p className="mt-2">Latitude: {location.latitude}, Longitude: {location.longitude}</p>
       )}
-
-      {error && (
-        <p className="mt-4 text-red-600">{error}</p>
-      )}
+      {error && <p className="text-red-500 mt-2">{error}</p>}
     </div>
   );
 }

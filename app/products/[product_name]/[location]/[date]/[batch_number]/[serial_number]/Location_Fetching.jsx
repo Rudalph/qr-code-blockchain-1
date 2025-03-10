@@ -109,6 +109,7 @@ const Location_Fetching = () => {
         async (position) => {
           const { latitude, longitude } = position.coords;
           const pageUrl = window.location.href;
+          const googleMapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
           
           try {
             await addDoc(collection(db, 'locations'), {
@@ -116,6 +117,7 @@ const Location_Fetching = () => {
               longitude,
               timestamp: new Date(),
               pageUrl,
+              googleMapsLink
             });
             alert('Location saved successfully!');
           } catch (err) {

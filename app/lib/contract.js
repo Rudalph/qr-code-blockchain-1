@@ -1,7 +1,10 @@
 // import Web3 from 'web3';
 
+
+//Hardhat : 0x08B299Fc65373bFA2678727763f2D6d8aDc883e9
+//Remix IDE Sepolia: 0xB8005CFb5e6Ff4A63a770699c5ED71C439066F61
 // Replace with your contract address and ABI
-const CONTRACT_ADDRESS = '0xB8005CFb5e6Ff4A63a770699c5ED71C439066F61'; // Your contract address
+const CONTRACT_ADDRESS = '0x08B299Fc65373bFA2678727763f2D6d8aDc883e9'; // Your contract address
 const CONTRACT_ABI = [
 	{
 		"inputs": [

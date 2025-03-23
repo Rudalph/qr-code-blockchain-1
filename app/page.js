@@ -27,26 +27,26 @@ export default function Home() {
   const [hashValue, setHashValue] = useState(null);
   const [txHash, setTxHash] = useState(null);
 
-  useEffect(() => {
-    const initializeWeb3 = async () => {
-      if (typeof window !== "undefined" && window.ethereum) {
-        try {
-          const web3Instance = new Web3(window.ethereum);
-          setWeb3(web3Instance);
+  // useEffect(() => {
+  //   const initializeWeb3 = async () => {
+  //     if (typeof window !== "undefined" && window.ethereum) {
+  //       try {
+  //         const web3Instance = new Web3(window.ethereum);
+  //         setWeb3(web3Instance);
 
-          const contractInstance = new web3Instance.eth.Contract(
-            contractABI,
-            contractAddress
-          );
-          setContract(contractInstance);
-        } catch (error) {
-          console.error("Error initializing Web3:", error);
-        }
-      }
-    };
+  //         const contractInstance = new web3Instance.eth.Contract(
+  //           contractABI,
+  //           contractAddress
+  //         );
+  //         setContract(contractInstance);
+  //       } catch (error) {
+  //         console.error("Error initializing Web3:", error);
+  //       }
+  //     }
+  //   };
 
-    initializeWeb3();
-  }, []);
+  //   initializeWeb3();
+  // }, []);
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -76,10 +76,10 @@ export default function Home() {
       setUrl(productUrl);
       setHashValue(productHash);
 
-      if (!window.ethereum) {
-        alert("MetaMask is not installed");
-        return;
-      }
+      // if (!window.ethereum) {
+      //   alert("MetaMask is not installed");
+      //   return;
+      // }
 
       // try {
       //   await window.ethereum.request({ method: "eth_requestAccounts" });
@@ -192,9 +192,9 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex justify-center align-middle items-center w-96 mx-[550px] mt-12 border border-green-600 bg-green-100 rounded-lg h-16">
+      {/* <div className="flex justify-center align-middle items-center w-96 mx-[550px] mt-12 border border-green-600 bg-green-100 rounded-lg h-16">
         {!web3 ? <p>Web3 not initialized. Please connect your wallet.</p> : <p>Connected to Smart Contract</p>}
-      </div>
+      </div> */}
 
       <Link href="/validation">
       <div className="flex justify-center align-middle items-center w-96 mx-[550px] mt-5 border border-blue-600 bg-[#A0C3FF] rounded-lg h-16">

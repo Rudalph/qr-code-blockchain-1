@@ -81,29 +81,54 @@ export default function Home() {
         return;
       }
 
+      // try {
+      //   await window.ethereum.request({ method: "eth_requestAccounts" });
+      //   const accounts = await web3.eth.getAccounts();
+      //   const sender = accounts[0];
+
+      //   const tx = await contract.methods.addProduct(
+      //     data.product_name,
+      //     data.batch_number,
+      //     data.location,
+      //     data.date,
+      //     data.serial_number,
+      //     data.price,
+      //     data.weight,
+      //     data.man_name,
+      //     productUrl,
+      //     productHash
+      //   ).send({ from: sender });
+
+      //   console.log("Transaction Hash:", tx.transactionHash);
+      //   setTxHash(tx.transactionHash);
+      // } catch (error) {
+      //   console.error("Error sending transaction:", error);
+      // }
+
       try {
-        await window.ethereum.request({ method: "eth_requestAccounts" });
-        const accounts = await web3.eth.getAccounts();
-        const sender = accounts[0];
+        console.log("I am data at frontend:",data)
+        const response = await fetch('/api/contract_api', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              ...data,
+              url:productUrl,
+              hashValue:productHash
 
-        const tx = await contract.methods.addProduct(
-          data.product_name,
-          data.batch_number,
-          data.location,
-          data.date,
-          data.serial_number,
-          data.price,
-          data.weight,
-          data.man_name,
-          productUrl,
-          productHash
-        ).send({ from: sender });
+            })
+        });
 
-        console.log("Transaction Hash:", tx.transactionHash);
-        setTxHash(tx.transactionHash);
-      } catch (error) {
-        console.error("Error sending transaction:", error);
-      }
+        const result = await response.json();
+        if (result.success) {
+            setTxHash(result.txHash);
+            alert(`Transaction Successful: ${result.txHash}`);
+        } else {
+            alert(`Transaction Failed: ${result.error}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert("Error submitting transaction.");
+    } 
     } catch (error) {
       console.error('Error sending data:', error);
     }

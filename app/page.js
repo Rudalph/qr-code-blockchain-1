@@ -52,88 +52,152 @@ export default function Home() {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
+  // const sendData = async (e) => {
+  //   e.preventDefault();
+  //   console.log("Form Data:", data);
+
+  //   try {
+  //     // https://qr-code-blockchain-1d-backend.onrender.com/qrcode
+  //     const response = await fetch('https://qr-code-blockchain-1d-backend.onrender.com/qrcode', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify(data)
+  //     });
+
+  //     const result = await response.json();
+  //     console.log('API Response:', result);
+  //     const qrCodeImage = result.qr_image;
+  //     const productUrl = result.url;
+  //     const productHash = result.hash_value;
+
+  //     setQrCode(qrCodeImage);
+  //     setUrl(productUrl);
+  //     setHashValue(productHash);
+
+  //     // if (!window.ethereum) {
+  //     //   alert("MetaMask is not installed");
+  //     //   return;
+  //     // }
+
+  //     // try {
+  //     //   await window.ethereum.request({ method: "eth_requestAccounts" });
+  //     //   const accounts = await web3.eth.getAccounts();
+  //     //   const sender = accounts[0];
+
+  //     //   const tx = await contract.methods.addProduct(
+  //     //     data.product_name,
+  //     //     data.batch_number,
+  //     //     data.location,
+  //     //     data.date,
+  //     //     data.serial_number,
+  //     //     data.price,
+  //     //     data.weight,
+  //     //     data.man_name,
+  //     //     productUrl,
+  //     //     productHash
+  //     //   ).send({ from: sender });
+
+  //     //   console.log("Transaction Hash:", tx.transactionHash);
+  //     //   setTxHash(tx.transactionHash);
+  //     // } catch (error) {
+  //     //   console.error("Error sending transaction:", error);
+  //     // }
+
+  //     try {
+  //       console.log("I am data at frontend:",data)
+  //       const response = await fetch('/api/contract_api', {
+  //           method: 'POST',
+  //           headers: { 'Content-Type': 'application/json' },
+  //           body: JSON.stringify({
+  //             ...data,
+  //             url:productUrl,
+  //             hashValue:productHash
+
+  //           })
+  //       });
+
+  //       const result = await response.json();
+  //       if (result.success) {
+  //           setTxHash(result.txHash);
+  //           alert(`Transaction Successful: ${result.txHash}`);
+  //       } else {
+  //           alert(`Transaction Failed: ${result.error}`);
+  //       }
+  //   } catch (error) {
+  //       console.error('Error:', error);
+  //       alert("Error submitting transaction.");
+  //   } 
+  //   } catch (error) {
+  //     console.error('Error sending data:', error);
+  //   }
+  // };
+
+
   const sendData = async (e) => {
     e.preventDefault();
     console.log("Form Data:", data);
-
+  
     try {
-      // https://qr-code-blockchain-1d-backend.onrender.com/qrcode
-      const response = await fetch('https://qr-code-blockchain-1d-backend.onrender.com/qrcode', {
+      // First API call to generate QR code
+      const qrResponse = await fetch('https://qr-code-blockchain-1d-backend.onrender.com/qrcode', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
       });
-
-      const result = await response.json();
-      console.log('API Response:', result);
-      const qrCodeImage = result.qr_image;
-      const productUrl = result.url;
-      const productHash = result.hash_value;
-
+  
+      if (!qrResponse.ok) {
+        throw new Error(`QR code API error: ${qrResponse.status} ${qrResponse.statusText}`);
+      }
+  
+      const qrResult = await qrResponse.json();
+      console.log('QR API Response:', qrResult);
+      
+      // Extract and set QR code data
+      const qrCodeImage = qrResult.qr_image;
+      const productUrl = qrResult.url;
+      const productHash = qrResult.hash_value;
+  
       setQrCode(qrCodeImage);
       setUrl(productUrl);
       setHashValue(productHash);
-
-      // if (!window.ethereum) {
-      //   alert("MetaMask is not installed");
-      //   return;
-      // }
-
-      // try {
-      //   await window.ethereum.request({ method: "eth_requestAccounts" });
-      //   const accounts = await web3.eth.getAccounts();
-      //   const sender = accounts[0];
-
-      //   const tx = await contract.methods.addProduct(
-      //     data.product_name,
-      //     data.batch_number,
-      //     data.location,
-      //     data.date,
-      //     data.serial_number,
-      //     data.price,
-      //     data.weight,
-      //     data.man_name,
-      //     productUrl,
-      //     productHash
-      //   ).send({ from: sender });
-
-      //   console.log("Transaction Hash:", tx.transactionHash);
-      //   setTxHash(tx.transactionHash);
-      // } catch (error) {
-      //   console.error("Error sending transaction:", error);
-      // }
-
-      try {
-        console.log("I am data at frontend:",data)
-        const response = await fetch('/api/contract_api', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              ...data,
-              url:productUrl,
-              hashValue:productHash
-
-            })
-        });
-
-        const result = await response.json();
-        if (result.success) {
-            setTxHash(result.txHash);
-            alert(`Transaction Successful: ${result.txHash}`);
-        } else {
-            alert(`Transaction Failed: ${result.error}`);
-        }
+  
+      // Second API call to handle contract interaction
+      const contractResponse = await fetch('/api/contract_api', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...data,
+          url: productUrl,
+          hashValue: productHash
+        })
+      });
+  
+      if (!contractResponse.ok) {
+        throw new Error(`Contract API error: ${contractResponse.status} ${contractResponse.statusText}`);
+      }
+  
+      const contractResult = await contractResponse.json();
+      
+      if (contractResult.success) {
+        setTxHash(contractResult.txHash);
+        alert(`Transaction Successful: ${contractResult.txHash}`);
+      } else {
+        // This handles when the API returns success:false rather than throwing an error
+        throw new Error(contractResult.error || 'Transaction failed without specific error');
+      }
+      
     } catch (error) {
-        console.error('Error:', error);
-        alert("Error submitting transaction.");
-    } 
-    } catch (error) {
-      console.error('Error sending data:', error);
+      // Unified error handling
+      console.error('Error in transaction process:', error);
+      alert(`Transaction Error: ${error.message || 'Unknown error occurred'}`);
     }
   };
 
+  
   return (
     <>
       <div className="flex justify-center align-middle items-center gap-6 mt-10">

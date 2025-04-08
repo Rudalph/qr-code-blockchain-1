@@ -62,24 +62,22 @@ def generate_qr():
         print("Received URLs... Starting QR code pdf generation...")
         
         for url in urls:
-            encrypted_url = f'http://localhost:3001/products/{url}'
-
             qr = qrcode.QRCode(
                 version=None,
                 box_size=2,
                 border=1,
                 error_correction=qrcode.constants.ERROR_CORRECT_H
             )
-            qr.add_data(encrypted_url)
+            qr.add_data(url)
             qr.make(fit=True)
             
             hash_obj = hashlib.sha256()
-            hash_obj.update(encrypted_url.encode())
+            hash_obj.update(url.encode())
             hash_value = hash_obj.hexdigest()
             
             qr_img = qr.make_image(fill="black", back_color="white")
 
-            pattern = r"/([^/]+)/([^/]+)/([^/]+)/([^/]+)"
+            pattern = r"https://[^/]+/products/([^/]+)/[^/]+/[^/]+/[^/]+/([^/]+)"
             pattern_match = re.match(pattern, url)
             
             if pattern_match:
@@ -127,7 +125,7 @@ def generate_qr():
 
         pdf.save()
         
-        send_pdf_via_email('keithzidand@gmail.com', pdf_buffer)
+        send_pdf_via_email('qrcodeblockchain@gmail.com', pdf_buffer)
         
         return jsonify({ 
             "success": "QR Code Generated",

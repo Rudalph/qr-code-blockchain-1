@@ -14,13 +14,16 @@ from email.mime.application import MIMEApplication
 from email.mime.text import MIMEText
 import smtplib
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 
 def send_pdf_via_email(manufacturer_email: str, pdf_buffer):
-    sender_email = "placementpro.jkl@gmail.com"
-    sender_password = 'iyps pbzz beyx ivxq '
+    sender_email = os.getenv("EMAIL_ID")
+    sender_password = os.getenv("EMAIL_PASS")
     subject = "QR Codes PDF"
     body = "Please find attached the QR codes PDF."
 

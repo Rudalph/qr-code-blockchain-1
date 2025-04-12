@@ -62,6 +62,7 @@ def generate_qr():
         print("Received URLs... Starting QR code pdf generation...")
         
         for url in urls:
+            print(f"url: {url}")
             qr = qrcode.QRCode(
                 version=None,
                 box_size=2,

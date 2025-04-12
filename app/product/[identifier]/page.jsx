@@ -9,7 +9,7 @@ export default function ProductDetails({ params }) {
     useEffect(() => {
         const fetchProductDetails = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/product/${identifier}`);
+                const response = await fetch(`http://localhost:3002/product/${identifier}`);
                 if (!response.ok) throw new Error("Failed to fetch product details");
 
                 const data = await response.json();
